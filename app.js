@@ -8,6 +8,7 @@ const express = require('express');
 const cors = require('cors');
 const path = require('path');
 const { getDatasOcupadas } = require('./utils/parseICS');
+const { router: googleRouter, criarEvento } = require('./utils/google');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -15,6 +16,7 @@ const PORT = process.env.PORT || 3000;
 // Middleware
 app.use(cors());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.json()); // Para aceitar JSON no corpo da requisição
 
 // Calendários por imóvel
 const calendarios = {
@@ -35,6 +37,23 @@ app.get('/disponibilidade/:imovelId', async (req, res) => {
     res.status(500).json({ erro: 'Erro ao processar calendário', detalhes: err.message });
   }
 });
+
+// Rota para criar evento no Google Calendar
+app.post('/reservar', async (req, res) => {
+  const { data, titulo } = req.body;
+  if (!data) return res.status(400).json({ erro: 'Data da reserva é obrigatória' });
+
+  try {
+    await criarEvento(data, titulo || 'Reserva TechBuy');
+    res.json({ sucesso: true, mensagem: 'Evento criado no Google Calendar' });
+  } catch (err) {
+    console.error('Erro ao criar evento:', err.message);
+    res.status(500).json({ erro: 'Erro ao criar evento', detalhes: err.message });
+  }
+});
+
+// Rotas de autenticação Google
+app.use(googleRouter);
 
 // Inicializa o servidor
 app.listen(PORT, () => {
