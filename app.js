@@ -8,7 +8,7 @@ const express = require('express');
 const cors = require('cors');
 const path = require('path');
 const { getDatasOcupadas } = require('./utils/parseICS');
-const { router: googleRouter, criarEvento } = require('./utils/google.js');
+const { router: googleRouter, criarEvento } = require('./utils/lola');
 const { importarReservasAirbnb } = require('./utils/airbnb');
 
 const app = express();
