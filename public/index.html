@@ -1,3 +1,8 @@
+<!--
+30/10/25
+WRW_BigBoss
+FlavioCallega_&_Copilot
+-->  
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -32,31 +37,44 @@
     });
     calendar.render();
 
-    const linksCalendario = {
-      casaPraia: 'https://www.airbnb.com.br/calendar/ical/41662018.ics?s=b8cedbfaf02c937a5ac60fb776cabbcb'
-    };
-
     function carregarCalendario() {
       const imovel = document.getElementById('imovelSelect').value;
       fetch(`/disponibilidade/${imovel}`)
         .then(res => res.json())
         .then(diasOcupados => {
-          const eventos = diasOcupados.map(data => ({
+          const hoje = new Date();
+          const diasDoMes = [];
+          for (let i = 0; i < 30; i++) {
+            const dia = new Date(hoje);
+            dia.setDate(dia.getDate() + i);
+            diasDoMes.push(dia.toISOString().split('T')[0]);
+          }
+
+          const diasDisponiveis = diasDoMes.filter(d => !diasOcupados.includes(d));
+
+          const eventosDisponiveis = diasDisponiveis.map(data => ({
+            title: 'Disponível',
+            start: data,
+            color: '#28a745'
+          }));
+
+          const eventosIndisponiveis = diasOcupados.map(data => ({
             title: 'Indisponível',
             start: data,
             color: '#ff4d4d'
           }));
+
           calendar.removeAllEvents();
-          calendar.addEventSource(eventos);
+          calendar.addEventSource([...eventosDisponiveis, ...eventosIndisponiveis]);
         });
     }
 
-   function reservar() {
-  const imovel = document.getElementById('imovelSelect').value;
-  const numeroWhatsApp = '5571993019981'; // número com DDI + DDD + 9
-  const mensagem = encodeURIComponent(`Olá! Gostaria de reservar o imóvel: ${imovel}`);
-  window.open(`https://wa.me/${numeroWhatsApp}?text=${mensagem}`, '_blank');
-}
+    function reservar() {
+      const imovel = document.getElementById('imovelSelect').value;
+      const numeroWhatsApp = '5571993019981';
+      const mensagem = encodeURIComponent(`Olá! Gostaria de reservar o imóvel: ${imovel}`);
+      window.open(`https://wa.me/${numeroWhatsApp}?text=${mensagem}`, '_blank');
+    }
 
     document.getElementById('imovelSelect').addEventListener('change', carregarCalendario);
     document.getElementById('imovelSelect').dispatchEvent(new Event('change'));
