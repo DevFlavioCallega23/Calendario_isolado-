@@ -8,7 +8,8 @@ const express = require('express');
 const cors = require('cors');
 const path = require('path');
 const { getDatasOcupadas } = require('./utils/parseICS');
-const { router: googleRouter, criarEvento } = require('./utils/google');
+const { router: googleRouter, criarEvento } = require('./utils/google.js');
+const { importarReservasAirbnb } = require('./utils/airbnb');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -49,6 +50,17 @@ app.post('/reservar', async (req, res) => {
   } catch (err) {
     console.error('Erro ao criar evento:', err.message);
     res.status(500).json({ erro: 'Erro ao criar evento', detalhes: err.message });
+  }
+});
+
+// Rota para importar reservas do Airbnb e sincronizar com Google Calendar
+app.get('/sincronizar-airbnb', async (req, res) => {
+  try {
+    await importarReservasAirbnb();
+    res.json({ sucesso: true, mensagem: 'Reservas do Airbnb sincronizadas com Google Calendar' });
+  } catch (err) {
+    console.error('Erro ao sincronizar Airbnb:', err.message);
+    res.status(500).json({ erro: 'Erro ao sincronizar Airbnb', detalhes: err.message });
   }
 });
 

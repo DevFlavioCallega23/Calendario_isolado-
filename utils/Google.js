@@ -8,8 +8,8 @@ const { google } = require('googleapis');
 const express = require('express');
 const router = express.Router();
 
-const CLIENT_ID = '893767602591-ku0l9tl5kj0q0z5m3e6kme3r9hrvpqgs.apps.googleusercontent.com';
-const CLIENT_SECRET = 'G0CSPX-Ur7Tx9z0f0ml3fkWnX10X_lONjI';
+const CLIENT_ID = '893767602591-ku0l9lt5kj0q99rsulacjne37qhrvpqs.apps.googleusercontent.com';
+const CLIENT_SECRET = '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';
 const REDIRECT_URI = 'http://localhost:3000/oauth2callback';
 
 const oauth2Client = new google.auth.OAuth2(CLIENT_ID, CLIENT_SECRET, REDIRECT_URI);
@@ -18,6 +18,7 @@ const oauth2Client = new google.auth.OAuth2(CLIENT_ID, CLIENT_SECRET, REDIRECT_U
 router.get('/auth/google', (req, res) => {
   const authUrl = oauth2Client.generateAuthUrl({
     access_type: 'offline',
+    prompt: 'consent', // força o refresh_token
     scope: ['https://www.googleapis.com/auth/calendar.events']
   });
   res.redirect(authUrl);
@@ -26,12 +27,18 @@ router.get('/auth/google', (req, res) => {
 // Rota de callback após login
 router.get('/oauth2callback', async (req, res) => {
   const code = req.query.code;
+  if (!code) {
+    return res.status(400).send('Código de autorização ausente na URL');
+  }
+
   try {
     const { tokens } = await oauth2Client.getToken(code);
     oauth2Client.setCredentials(tokens);
-    res.send('Autenticação concluída com sucesso! Pode fechar esta aba.');
+
+    console.log('Tokens recebidos:', tokens); // debug opcional
+    res.send('✅ Autenticação concluída com sucesso! Pode fechar esta aba.');
   } catch (err) {
-    console.error('Erro na autenticação:', err.message);
+    console.error('Erro na autenticação:', err);
     res.status(500).send('Erro na autenticação');
   }
 });
@@ -52,7 +59,7 @@ async function criarEvento(data, titulo = 'Reserva TechBuy') {
       calendarId: 'primary',
       resource: evento
     });
-    console.log('Evento criado:', response.data.htmlLink);
+    console.log('✅ Evento criado:', response.data.htmlLink);
   } catch (err) {
     console.error('Erro ao criar evento:', err.message);
   }
