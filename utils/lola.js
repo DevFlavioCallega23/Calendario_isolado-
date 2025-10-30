@@ -1,19 +1,19 @@
-/*
+/* 
 30/10/25
 WRW_BigBoss
 FlavioCallega_&_Copilot
 */
 
+require('dotenv').config();
 const { google } = require('googleapis');
 const express = require('express');
 const router = express.Router();
 
-const CLIENT_ID = '893767602591-ku0l9lt5kj0q99rsulacjne37qhrvpqs.apps.googleusercontent.com';
-const CLIENT_SECRET = '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';
-const REDIRECT_URI = 'http://localhost:3000/oauth2callback';
+const CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
+const CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET;
+const REDIRECT_URI = process.env.GOOGLE_REDIRECT_URI;
 
 const oauth2Client = new google.auth.OAuth2(CLIENT_ID, CLIENT_SECRET, REDIRECT_URI);
-
 // Rota para iniciar autenticação
 router.get('/auth/google', (req, res) => {
   const authUrl = oauth2Client.generateAuthUrl({
