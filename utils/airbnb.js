@@ -6,7 +6,7 @@ FlavioCallega_&_Copilot
 
 const ical = require('node-ical');
 const axios = require('axios');
-const { criarEvento } = require('./google');
+const { criarEvento } = require('./lola');
 
 const AIRBNB_ICS_URL = 'https://www.airbnb.com.br/calendar/ical/41662018.ics?s=b8cedbfaf02c937a5ac60fb776cabbcb';
 
