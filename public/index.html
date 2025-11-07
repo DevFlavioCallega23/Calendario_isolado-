@@ -10,12 +10,94 @@ FlavioCallega_&_Copilot
   <title>Calendário de Imóveis</title>
   <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.css" rel="stylesheet">
   <style>
-    body { font-family: Arial, sans-serif; padding: 20px; background: #f4f4f4; }
-    h1 { text-align: center; }
-    #calendar { max-width: 900px; margin: 40px auto; background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
-    select, .reserva-btn { display: block; margin: 20px auto; font-size: 16px; }
-    select { padding: 10px; }
-    .reserva-btn { padding: 10px 20px; background: #28a745; color: white; border: none; border-radius: 5px; cursor: pointer; }
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      background: #f4f4f4;
+    }
+    h1 {
+      text-align: center;
+    }
+    #calendar {
+      max-width: 900px;
+      margin: 40px auto;
+      background: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    select, .reserva-btn {
+      display: block;
+      margin: 20px auto;
+      font-size: 16px;
+    }
+    select {
+      padding: 10px;
+    }
+    .reserva-btn {
+      padding: 10px 20px;
+      background: #28a745;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    /* Carrossel */
+    .carousel-container {
+      position: relative;
+      max-width: 900px;
+      margin: 40px auto;
+      overflow: hidden;
+      background: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+
+    .carousel {
+      display: flex;
+      transition: transform 0.5s ease-in-out;
+    }
+
+    .slide {
+      min-width: 100%;
+      box-sizing: border-box;
+      text-align: center;
+      display: none;
+    }
+
+    .slide.active {
+      display: block;
+    }
+
+    .slide img {
+  width: 100%;
+  height: 600px; /* altura fixa */
+  object-fit: cover; /* recorta sem distorcer */
+  border-radius: 8px;
+}
+
+    .caption {
+      margin-top: 8px;
+      font-size: 1rem;
+      color: #333;
+    }
+
+    .prev, .next {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: #ffffffaa;
+      border: none;
+      font-size: 2rem;
+      cursor: pointer;
+      padding: 0 10px;
+      z-index: 10;
+    }
+
+    .prev { left: 10px; }
+    .next { right: 10px; }
   </style>
 </head>
 <body>
@@ -26,6 +108,43 @@ FlavioCallega_&_Copilot
 
   <div id="calendar"></div>
   <button class="reserva-btn" onclick="reservar()">Reservar imóvel</button>
+
+  <!-- Carrossel de fotos -->
+  <div class="carousel-container">
+  <div class="carousel">
+    <div class="slide active">
+      <img src="/img/cozinha.png" alt="Cozinha equipada e espaço para refeições">
+      <p class="caption">🍽️ Cozinha equipada e espaço para refeições</p>
+    </div>
+    <div class="slide">
+      <img src="/img/quarto-duplo.png" alt="Quarto confortável com TV e ventilador">
+      <p class="caption">🛏️ Quarto confortável com TV e ventilador</p>
+    </div>
+    <div class="slide">
+      <img src="/img/quarto-extra.png" alt="Quarto adicional com decoração moderna">
+      <p class="caption">🌿 Quarto adicional com decoração moderna</p>
+    </div>
+    <div class="slide">
+      <img src="/img/banheiro.png" alt="Banheiro com ducha e acabamento clean">
+      <p class="caption">🚿 Banheiro com ducha e acabamento clean</p>
+    </div>
+    <div class="slide">
+      <img src="/img/academia.png" alt="Academia completa no condomínio">
+      <p class="caption">🏋️‍♂️ Academia completa no condomínio</p>
+    </div>
+    <div class="slide">
+      <img src="/img/piscinas.png" alt="Piscinas com vista para o mar">
+      <p class="caption">🌊🏖️ Piscinas com vista para o mar</p>
+    </div>
+    <div class="slide">
+      <img src="/img/quadras.png" alt="Quadras esportivas à beira-mar">
+      <p class="caption">🏐🎾🌴 Quadras esportivas à beira-mar</p>
+    </div>
+  </div>
+  <button class="prev">⟨</button>
+  <button class="next">⟩</button>
+</div>
+
 
   <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
   <script>
@@ -78,6 +197,29 @@ FlavioCallega_&_Copilot
 
     document.getElementById('imovelSelect').addEventListener('change', carregarCalendario);
     document.getElementById('imovelSelect').dispatchEvent(new Event('change'));
+
+    // Carrossel JS
+    const slides = document.querySelectorAll('.slide');
+    let current = 0;
+
+    document.querySelector('.next').onclick = () => {
+      slides[current].classList.remove('active');
+      current = (current + 1) % slides.length;
+      slides[current].classList.add('active');
+    };
+
+    document.querySelector('.prev').onclick = () => {
+      slides[current].classList.remove('active');
+      current = (current - 1 + slides.length) % slides.length;
+      slides[current].classList.add('active');
+    }
+      // Autoplay do carrossel
+setInterval(() => {
+  slides[current].classList.remove('active');
+  current = (current + 1) % slides.length;
+  slides[current].classList.add('active');
+  }, 5000); // troca a cada 5 segundos
+;
   </script>
 </body>
 </html>
