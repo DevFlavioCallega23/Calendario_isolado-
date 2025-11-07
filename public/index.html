@@ -1,225 +1,99 @@
 <!--
-30/10/25
+07/11/25
 WRW_BigBoss
 FlavioCallega_&_Copilot
--->  
+-->
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
   <meta charset="UTF-8">
-  <title>Calendário de Imóveis</title>
-  <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.css" rel="stylesheet">
+  <title>TechBuy Imóveis</title>
   <style>
     body {
       font-family: Arial, sans-serif;
-      padding: 20px;
+      margin: 0;
       background: #f4f4f4;
     }
-    h1 {
+    header {
+      background: #28a745;
+      color: white;
+      padding: 20px;
       text-align: center;
     }
-    #calendar {
-      max-width: 900px;
-      margin: 40px auto;
-      background: #fff;
-      padding: 20px;
+    .container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 20px;
+      padding: 40px;
+    }
+    .card {
+      background: white;
+      width: 300px;
       border-radius: 8px;
       box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      overflow: hidden;
+      text-align: center;
     }
-    select, .reserva-btn {
-      display: block;
-      margin: 20px auto;
-      font-size: 16px;
+    .card img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
     }
-    select {
-      padding: 10px;
+    .card h3 {
+      margin: 10px 0;
     }
-    .reserva-btn {
+    .card p {
+      color: #666;
+      font-size: 0.9rem;
+      margin: 0 10px 10px;
+    }
+    .card a {
+      display: inline-block;
+      margin: 10px;
       padding: 10px 20px;
       background: #28a745;
       color: white;
-      border: none;
+      text-decoration: none;
       border-radius: 5px;
-      cursor: pointer;
     }
-
-    /* Carrossel */
-    .carousel-container {
-      position: relative;
-      max-width: 900px;
-      margin: 40px auto;
-      overflow: hidden;
-      background: #fff;
-      padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
-    }
-
-    .carousel {
-      display: flex;
-      transition: transform 0.5s ease-in-out;
-    }
-
-    .slide {
-      min-width: 100%;
-      box-sizing: border-box;
+    footer {
       text-align: center;
-      display: none;
+      padding: 20px;
+      background: #ddd;
+      font-size: 0.8rem;
     }
-
-    .slide.active {
-      display: block;
-    }
-
-    .slide img {
-  width: 100%;
-  height: 600px; /* altura fixa */
-  object-fit: cover; /* recorta sem distorcer */
-  border-radius: 8px;
-}
-
-    .caption {
-      margin-top: 8px;
-      font-size: 1rem;
-      color: #333;
-    }
-
-    .prev, .next {
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-      background: #ffffffaa;
-      border: none;
-      font-size: 2rem;
-      cursor: pointer;
-      padding: 0 10px;
-      z-index: 10;
-    }
-
-    .prev { left: 10px; }
-    .next { right: 10px; }
   </style>
 </head>
 <body>
-  <h1>Disponibilidade dos Imóveis</h1>
-  <select id="imovelSelect">
-    <option value="casaPraia">🏖️ Casa na Praia</option>
-  </select>
+  <header>
+    <h1>TechBuy Imóveis</h1>
+    <p>Escolha seu destino e veja a disponibilidade</p>
+  </header>
 
-  <div id="calendar"></div>
-  <button class="reserva-btn" onclick="reservar()">Reservar imóvel</button>
-
-  <!-- Carrossel de fotos -->
-  <div class="carousel-container">
-  <div class="carousel">
-    <div class="slide active">
-      <img src="img/cozinha.png" alt="Cozinha equipada e espaço para refeições">
-      <p class="caption">🍽️ Cozinha equipada e espaço para refeições</p>
+  <div class="container">
+    <div class="card">
+      <img src="img/casa-praia.png" alt="Casa na Praia">
+      <h3>Casa na Praia</h3>
+      <p>Vista para o mar, piscina e quadras esportivas</p>
+      <a href="imovelUm.html">Ver disponibilidade</a>
     </div>
-    <div class="slide">
-      <img src="img/quarto-duplo.png" alt="Quarto confortável com TV e ventilador">
-      <p class="caption">🛏️ Quarto confortável com TV e ventilador</p>
+    <div class="card">
+      <img src="img/apto-cidade.png" alt="Apartamento na Cidade">
+      <h3>Apartamento na Cidade</h3>
+      <p>Moderno, perto de tudo, ideal para negócios</p>
+      <a href="#">Ver disponibilidade</a>
     </div>
-    <div class="slide">
-      <img src="img/quarto-extra.png" alt="Quarto adicional com decoração moderna">
-      <p class="caption">🌿 Quarto adicional com decoração moderna</p>
-    </div>
-    <div class="slide">
-      <img src="img/banheiro.png" alt="Banheiro com ducha e acabamento clean">
-      <p class="caption">🚿 Banheiro com ducha e acabamento clean</p>
-    </div>
-    <div class="slide">
-      <img src="img/academia.png" alt="Academia completa no condomínio">
-      <p class="caption">🏋️‍♂️ Academia completa no condomínio</p>
-    </div>
-    <div class="slide">
-      <img src="img/piscinas.png" alt="Piscinas com vista para o mar">
-      <p class="caption">🌊🏖️ Piscinas com vista para o mar</p>
-    </div>
-    <div class="slide">
-      <img src="img/quadras.png" alt="Quadras esportivas à beira-mar">
-      <p class="caption">🏐🎾🌴 Quadras esportivas à beira-mar</p>
+    <div class="card">
+      <img src="img/chale-montanha.png" alt="Chalé na Montanha">
+      <h3>Chalé na Montanha</h3>
+      <p>Refúgio tranquilo com lareira e vista panorâmica</p>
+      <a href="#">Ver disponibilidade</a>
     </div>
   </div>
-  <button class="prev">⟨</button>
-  <button class="next">⟩</button>
-</div>
 
-
-  <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
-  <script>
-    const calendarEl = document.getElementById('calendar');
-    const calendar = new FullCalendar.Calendar(calendarEl, {
-      initialView: 'dayGridMonth',
-      locale: 'pt-br',
-      events: []
-    });
-    calendar.render();
-
-    function carregarCalendario() {
-      const imovel = document.getElementById('imovelSelect').value;
-      fetch(`/disponibilidade/${imovel}`)
-        .then(res => res.json())
-        .then(diasOcupados => {
-          const hoje = new Date();
-          const diasDoMes = [];
-          for (let i = 0; i < 30; i++) {
-            const dia = new Date(hoje);
-            dia.setDate(dia.getDate() + i);
-            diasDoMes.push(dia.toISOString().split('T')[0]);
-          }
-
-          const diasDisponiveis = diasDoMes.filter(d => !diasOcupados.includes(d));
-
-          const eventosDisponiveis = diasDisponiveis.map(data => ({
-            title: 'Disponível',
-            start: data,
-            color: '#28a745'
-          }));
-
-          const eventosIndisponiveis = diasOcupados.map(data => ({
-            title: 'Indisponível',
-            start: data,
-            color: '#ff4d4d'
-          }));
-
-          calendar.removeAllEvents();
-          calendar.addEventSource([...eventosDisponiveis, ...eventosIndisponiveis]);
-        });
-    }
-
-    function reservar() {
-      const imovel = document.getElementById('imovelSelect').value;
-      const numeroWhatsApp = '5571993019981';
-      const mensagem = encodeURIComponent(`Olá! Gostaria de reservar o imóvel: ${imovel}`);
-      window.open(`https://wa.me/${numeroWhatsApp}?text=${mensagem}`, '_blank');
-    }
-
-    document.getElementById('imovelSelect').addEventListener('change', carregarCalendario);
-    document.getElementById('imovelSelect').dispatchEvent(new Event('change'));
-
-    // Carrossel JS
-    const slides = document.querySelectorAll('.slide');
-    let current = 0;
-
-    document.querySelector('.next').onclick = () => {
-      slides[current].classList.remove('active');
-      current = (current + 1) % slides.length;
-      slides[current].classList.add('active');
-    };
-
-    document.querySelector('.prev').onclick = () => {
-      slides[current].classList.remove('active');
-      current = (current - 1 + slides.length) % slides.length;
-      slides[current].classList.add('active');
-    }
-      // Autoplay do carrossel
-setInterval(() => {
-  slides[current].classList.remove('active');
-  current = (current + 1) % slides.length;
-  slides[current].classList.add('active');
-  }, 5000); // troca a cada 5 segundos
-;
-  </script>
+  <footer>
+    &copy; 2025 TechBuy. Todos os direitos reservados.
+  </footer>
 </body>
 </html>
