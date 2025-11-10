@@ -1,0 +1,116 @@
+<!--
+10/11/25
+WRW_BigBoss
+FlavioCallega_&_Copilot
+-->
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Farol Barra Flat - Disponibilidade</title>
+  <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="../style.css" type="text/css">
+</head>
+<body>
+  <h1>Farol Barra Flat - Disponibilidade</h1>
+  <p style="text-align:center;">Moderno, perto de tudo, ideal para negócios</p>
+
+  <div id="calendar"></div>
+  <button class="reserva-btn" onclick="reservar()">Reservar imóvel</button>
+  <a href="index.html" class="reserva-btn voltar-btn">← Voltar para Home</a>
+
+  <div class="carousel-container">
+    <div class="carousel">
+      <div class="slide active">
+        <img src="img/2.sala.png" alt="Sala com vista para o Farol">
+        <p class="caption">🛋️ Sala com vista para o Farol</p>
+      </div>
+      <div class="slide">
+        <img src="img/2.quarto.png" alt="Quarto com cama queen">
+        <p class="caption">🛏️ Quarto com cama queen</p>
+      </div>
+      <div class="slide">
+        <img src="img/2.cozinha.png" alt="Cozinha funcional">
+        <p class="caption">🍳 Cozinha funcional</p>
+      </div>
+      <div class="slide">
+        <img src="img/2.banheiro.png" alt="Banheiro com ducha quente">
+        <p class="caption">🚿 Banheiro com ducha quente</p>
+      </div>
+    </div>
+    <button class="prev">⟨</button>
+    <button class="next">⟩</button>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
+  <script>
+    const calendarEl = document.getElementById('calendar');
+    const calendar = new FullCalendar.Calendar(calendarEl, {
+      initialView: 'dayGridMonth',
+      locale: 'pt-br',
+      events: []
+    });
+    calendar.render();
+
+    function carregarCalendario() {
+      fetch('/calendarios/farolBarraFlat.json')
+        .then(res => res.json())
+        .then(diasOcupados => {
+          const hoje = new Date();
+          const diasDoMes = [];
+          for (let i = 0; i < 30; i++) {
+            const dia = new Date(hoje);
+            dia.setDate(dia.getDate() + i);
+            diasDoMes.push(dia.toISOString().split('T')[0]);
+          }
+
+          const diasDisponiveis = diasDoMes.filter(d => !diasOcupados.includes(d));
+
+          const eventosDisponiveis = diasDisponiveis.map(data => ({
+            title: 'Disponível',
+            start: data,
+            color: '#28a745'
+          }));
+
+          const eventosIndisponiveis = diasOcupados.map(data => ({
+            title: 'Indisponível',
+            start: data,
+            color: '#ff4d4d'
+          }));
+
+          calendar.removeAllEvents();
+          calendar.addEventSource([...eventosDisponiveis, ...eventosIndisponiveis]);
+        });
+    }
+
+    function reservar() {
+      const numeroWhatsApp = '5571993019981';
+      const mensagem = encodeURIComponent(`Olá! Gostaria de reservar o imóvel: Farol Barra Flat, 214`);
+      window.open(`https://wa.me/${numeroWhatsApp}?text=${mensagem}`, '_blank');
+    }
+
+    carregarCalendario();
+
+    const slides = document.querySelectorAll('.slide');
+    let current = 0;
+
+    document.querySelector('.next').onclick = () => {
+      slides[current].classList.remove('active');
+      current = (current + 1) % slides.length;
+      slides[current].classList.add('active');
+    };
+
+    document.querySelector('.prev').onclick = () => {
+      slides[current].classList.remove('active');
+      current = (current - 1 + slides.length) % slides.length;
+      slides[current].classList.add('active');
+    };
+
+    setInterval(() => {
+      slides[current].classList.remove('active');
+      current = (current + 1) % slides.length;
+      slides[current].classList.add('active');
+    }, 5000);
+  </script>
+</body>
+</html>

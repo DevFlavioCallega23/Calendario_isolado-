@@ -3,9 +3,10 @@
   "version": "1.0.0",
   "description": "Script para integração com calendário via ICS",
   "main": "app.js",
-  "scripts": {
-    "start": "node app.js"
-  },
+ "scripts": {
+  "start": "node app.js",
+  "sync": "node sincronizador.js"
+},
   "keywords": [
     "calendário",
     "ical",

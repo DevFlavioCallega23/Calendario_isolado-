@@ -1,0 +1,160 @@
+ /* Estilo do HomePage */
+ body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      background: #f4f4f4;
+    }
+    header {
+      background: #28a745;
+      color: white;
+      padding: 20px;
+      text-align: center;
+    }
+    .container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 20px;
+      padding: 40px;
+    }
+    .card {
+      background: white;
+      width: 300px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      overflow: hidden;
+      text-align: center;
+    }
+    .card img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+    }
+    .card h3 {
+      margin: 10px 0;
+    }
+    .card p {
+      color: #666;
+      font-size: 0.9rem;
+      margin: 0 10px 10px;
+    }
+    .card a {
+      display: inline-block;
+      margin: 10px;
+      padding: 10px 20px;
+      background: #28a745;
+      color: white;
+      text-decoration: none;
+      border-radius: 5px;
+    }
+    footer {
+      text-align: center;
+      padding: 20px;
+      background: #ddd;
+      font-size: 0.8rem;
+    }
+
+ /* Paginas dos Imoveis */   
+
+  body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      background: #f4f4f4;
+    }
+    h1 {
+      text-align: center;
+    }
+    #calendar {
+      max-width: 900px;
+      margin: 40px auto;
+      background: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    select, .reserva-btn {
+      display: block;
+      margin: 20px auto;
+      font-size: 16px;
+    }
+    select {
+      padding: 10px;
+    }
+    .reserva-btn {
+      padding: 10px 20px;
+      background: #28a745;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    /* Carrossel */
+    .carousel-container {
+      position: relative;
+      max-width: 900px;
+      margin: 40px auto;
+      overflow: hidden;
+      background: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+
+    .carousel {
+      display: flex;
+      transition: transform 0.5s ease-in-out;
+    }
+
+    .slide {
+      min-width: 100%;
+      box-sizing: border-box;
+      text-align: center;
+      display: none;
+    }
+
+    .slide.active {
+      display: block;
+    }
+
+    .slide img {
+  width: 100%;
+  height: 600px; /* altura fixa */
+  object-fit: cover; /* recorta sem distorcer */
+  border-radius: 8px;
+}
+
+    .caption {
+      margin-top: 8px;
+      font-size: 1rem;
+      color: #333;
+    }
+
+    .prev, .next {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: #ffffffaa;
+      border: none;
+      font-size: 2rem;
+      cursor: pointer;
+      padding: 0 10px;
+      z-index: 10;
+    }
+
+    .prev { left: 10px; }
+    .next { right: 10px; }
+    
+    .voltar-btn {
+  background: #007bff; /* azul */
+  text-align: center;
+  text-decoration: none;
+  display: block;
+  width: fit-content;
+  margin: 10px auto;
+  transition: background 0.3s ease;
+}
+
+.voltar-btn:hover {
+  background: #0056b3;
+}
