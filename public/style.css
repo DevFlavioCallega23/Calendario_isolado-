@@ -152,7 +152,7 @@ select {
   background: #0056b3;
 }
 /* Garante que o rodapé fique no fundo */
-body {
+.homepage {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
