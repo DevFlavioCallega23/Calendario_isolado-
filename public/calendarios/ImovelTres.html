@@ -48,7 +48,8 @@
     calendar.render();
 
     function carregarCalendario() {
-      fetch('/calendarios/ondinaApartHotel.json')
+      // 🔧 Agora chamando a API do servidor Express
+      fetch('/disponibilidade/ondinaApartHotel')
         .then(res => res.json())
         .then(diasOcupados => {
           const hoje = new Date();
@@ -75,7 +76,8 @@
 
           calendar.removeAllEvents();
           calendar.addEventSource([...eventosDisponiveis, ...eventosIndisponiveis]);
-        });
+        })
+        .catch(err => console.error('Erro ao carregar calendário:', err));
     }
 
     function reservar() {
@@ -86,6 +88,7 @@
 
     carregarCalendario();
 
+    // Carousel
     const slides = document.querySelectorAll('.slide');
     let current = 0;
 

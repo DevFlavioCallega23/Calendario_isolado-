@@ -53,7 +53,8 @@ FlavioCallega_&_Copilot
     calendar.render();
 
     function carregarCalendario() {
-      fetch('/calendarios/farolBarraFlat.json')
+      // 🔧 Agora chamando a API do servidor Express
+      fetch('/disponibilidade/farolBarraFlat')
         .then(res => res.json())
         .then(diasOcupados => {
           const hoje = new Date();
@@ -80,7 +81,8 @@ FlavioCallega_&_Copilot
 
           calendar.removeAllEvents();
           calendar.addEventSource([...eventosDisponiveis, ...eventosIndisponiveis]);
-        });
+        })
+        .catch(err => console.error('Erro ao carregar calendário:', err));
     }
 
     function reservar() {
@@ -91,6 +93,7 @@ FlavioCallega_&_Copilot
 
     carregarCalendario();
 
+    // Carousel
     const slides = document.querySelectorAll('.slide');
     let current = 0;
 
