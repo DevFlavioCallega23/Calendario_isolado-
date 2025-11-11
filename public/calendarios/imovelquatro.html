@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Smart Convenções - Disponibilidade</title>
+  <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="../style.css" type="text/css">
+</head>
+<body>
+  <h1>Smart Convenções, 509</h1>
+  <p style="text-align:center;">Estilo executivo com conforto e localização estratégica</p>
+
+  <div id="calendar"></div>
+  <button class="reserva-btn" onclick="reservar()">Reservar imóvel</button>
+  <a href="index.html" class="reserva-btn voltar-btn">← Voltar para Home</a>
+
+  <div class="carousel-container">
+    <div class="carousel">
+      <div class="slide active">
+        <img src="img/4.sala.png" alt="Sala moderna com espaço de trabalho">
+        <p class="caption">🛋️ Sala moderna com espaço de trabalho</p>
+      </div>
+      <div class="slide">
+        <img src="img/4.quarto.png" alt="Quarto com cama king e iluminação natural">
+        <p class="caption">🛏️ Quarto com cama king e iluminação natural</p>
+      </div>
+      <div class="slide">
+        <img src="img/4.cozinha.png" alt="Cozinha americana equipada">
+        <p class="caption">🍳 Cozinha americana equipada</p>
+      </div>
+      <div class="slide">
+        <img src="img/4.banheiro.png" alt="Banheiro com ducha e espelho iluminado">
+        <p class="caption">🚿 Banheiro com ducha e espelho iluminado</p>
+      </div>
+      <div class="slide">
+        <img src="img/4.varanda.png" alt="Varanda com vista panorâmica">
+        <p class="caption">🌇 Varanda com vista panorâmica</p>
+      </div>
+    </div>
+    <button class="prev">⟨</button>
+    <button class="next">⟩</button>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
+  <script>
+    const calendarEl = document.getElementById('calendar');
+    const calendar = new FullCalendar.Calendar(calendarEl, {
+      initialView: 'dayGridMonth',
+      locale: 'pt-br',
+      events: []
+    });
+    calendar.render();
+
+    function carregarCalendario() {
+      fetch('/calendarios/smartConvencoes.json')
+        .then(res => res.json())
+        .then(diasOcupados => {
+          const hoje = new Date();
+          const diasDoMes = [];
+          for (let i = 0; i < 30; i++) {
+            const dia = new Date(hoje);
+            dia.setDate(dia.getDate() + i);
+            diasDoMes.push(dia.toISOString().split('T')[0]);
+          }
+
+          const diasDisponiveis = diasDoMes.filter(d => !diasOcupados.includes(d));
+
+          const eventosDisponiveis = diasDisponiveis.map(data => ({
+            title: 'Disponível',
+            start: data,
+            color: '#28a745'
+          }));
+
+          const eventosIndisponiveis = diasOcupados.map(data => ({
+            title: 'Indisponível',
+            start: data,
+            color: '#ff4d4d'
+          }));
+
+          calendar.removeAllEvents();
+          calendar.addEventSource([...eventosDisponiveis, ...eventosIndisponiveis]);
+        });
+    }
+
+    function reservar() {
+      const numeroWhatsApp = '5571993019981';
+      const mensagem = encodeURIComponent(`Olá! Gostaria de reservar o imóvel: Smart Convenções, 509`);
+      window.open(`https://wa.me/${numeroWhatsApp}?text=${mensagem}`, '_blank');
+    }
+
+    carregarCalendario();
+
+    const slides = document.querySelectorAll('.slide');
+    let current = 0;
+
+    document.querySelector('.next').onclick = () => {
+      slides[current].classList.remove('active');
+      current = (current + 1) % slides.length;
+      slides[current].classList.add('active');
+    };
+
+    document.querySelector('.prev').onclick = () => {
+      slides[current].classList.remove('active');
+      current = (current - 1 + slides.length) % slides.length;
+      slides[current].classList.add('active');
+    };
+
+    setInterval(() => {
+      slides[current].classList.remove('active');
+      current = (current + 1) % slides.length;
+      slides[current].classList.add('active');
+    }, 5000);
+  </script>
+</body>
+</html>
