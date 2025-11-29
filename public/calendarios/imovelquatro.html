@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Smart Convenções - Disponibilidade</title>
+  <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="../style.css" type="text/css">
+</head>
+<body>
+  <h1>Smart Convenções, 509</h1>
+  <p style="text-align:center;">Estilo executivo com conforto e localização estratégica</p>
+
+  <div id="calendar"></div>
+  <button class="reserva-btn" onclick="reservar()">Reservar imóvel</button>
+  <a href="../index.html" class="reserva-btn voltar-btn">← Voltar para Home</a>
+
+  <div class="carousel-container">
+    <div class="carousel">
+      <div class="slide active">
+        <img src="img/4.sala.png" alt="Sala moderna com espaço de trabalho">
+        <p class="caption">🛋️ Sala moderna com espaço de trabalho</p>
+      </div>
+      <div class="slide">
+        <img src="img/4.quarto.png" alt="Quarto com cama king e iluminação natural">
+        <p class="caption">🛏️ Quarto com cama king e iluminação natural</p>
+      </div>
+      <div class="slide">
+        <img src="img/4.cozinha.png" alt="Cozinha americana equipada">
+        <p class="caption">🍳 Cozinha americana equipada</p>
+      </div>
+      <div class="slide">
+        <img src="img/4.banheiro.png" alt="Banheiro com ducha e espelho iluminado">
+        <p class="caption">🚿 Banheiro com ducha e espelho iluminado</p>
+      </div>
+      <div class="slide">
+        <img src="img/4.varanda.png" alt="Varanda com vista panorâmica">
+        <p class="caption">🌇 Varanda com vista panorâmica</p>
+      </div>
+    </div>
+    <button class="prev">⟨</button>
+    <button class="next">⟩</button>
+  </div>
+
+  <div id="MapsContato">
+    <div class="map-container">
+      <h2 style="text-align:center;">📍 Localização</h2>
+      <iframe
+        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3887.8036542874984!2d-38.441310125097694!3d-12.98440666006658!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x7161b9cb0bc88f7%3A0xe1f2339bb8d7237!2zU21hcnQgQ29udmVuw6fDtWVz!5e0!3m2!1spt-BR!2sbr!4v1764412583336!5m2!1spt-BR!2sbr"
+        width="100%"
+        height="300"
+        style="border:0;"
+        allowfullscreen=""
+        loading="lazy"
+        referrerpolicy="no-referrer-when-downgrade">
+      </iframe>
+    </div>
+  </div>
+  
+
+  <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
+  <script>
+    const calendarEl = document.getElementById('calendar');
+    const calendar = new FullCalendar.Calendar(calendarEl, {
+      initialView: 'dayGridMonth',
+      locale: 'pt-br',
+      events: []
+    });
+    calendar.render();
+
+    function carregarCalendario() {
+      // 🔧 Agora chamando a API do servidor Express
+      fetch('/disponibilidade/smartConvencoes')
+        .then(res => res.json())
+        .then(diasOcupados => {
+          const hoje = new Date();
+          const diasDoMes = [];
+          for (let i = 0; i < 30; i++) {
+            const dia = new Date(hoje);
+            dia.setDate(dia.getDate() + i);
+            diasDoMes.push(dia.toISOString().split('T')[0]);
+          }
+
+          const diasDisponiveis = diasDoMes.filter(d => !diasOcupados.includes(d));
+
+          const eventosDisponiveis = diasDisponiveis.map(data => ({
+            title: 'Disponível',
+            start: data,
+            color: '#28a745'
+          }));
+
+          const eventosIndisponiveis = diasOcupados.map(data => ({
+            title: 'Indisponível',
+            start: data,
+            color: '#ff4d4d'
+          }));
+
+          calendar.removeAllEvents();
+          calendar.addEventSource([...eventosDisponiveis, ...eventosIndisponiveis]);
+        })
+        .catch(err => console.error('Erro ao carregar calendário:', err));
+    }
+
+    function reservar() {
+      const numeroWhatsApp = '5571993019981';
+      const mensagem = encodeURIComponent(`Olá! Gostaria de reservar o imóvel: Smart Convenções, 509`);
+      window.open(`https://wa.me/${numeroWhatsApp}?text=${mensagem}`, '_blank');
+    }
+
+    carregarCalendario();
+
+    // Carousel
+    const slides = document.querySelectorAll('.slide');
+    let current = 0;
+
+    document.querySelector('.next').onclick = () => {
+      slides[current].classList.remove('active');
+      current = (current + 1) % slides.length;
+      slides[current].classList.add('active');
+    };
+
+    document.querySelector('.prev').onclick = () => {
+      slides[current].classList.remove('active');
+      current = (current - 1 + slides.length) % slides.length;
+      slides[current].classList.add('active');
+    };
+
+    setInterval(() => {
+      slides[current].classList.remove('active');
+      current = (current + 1) % slides.length;
+      slides[current].classList.add('active');
+    }, 5000);
+  </script>
+</body>
+</html>

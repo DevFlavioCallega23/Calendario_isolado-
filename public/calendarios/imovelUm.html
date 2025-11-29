@@ -1,0 +1,136 @@
+<!--
+30/10/25
+WRW_BigBoss
+FlavioCallega_&_Copilot
+-->  
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Calendário de Imóveis</title>
+  <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="../style.css" type="text/css">
+</head>
+<body>
+  <h1>Disponibilidade dos Imóveis</h1>
+  <select id="imovelSelect">
+    <option value="casaPraia">🏖️ Casa na Praia</option>
+  </select>
+
+  <div id="calendar"></div>
+  <button class="reserva-btn" onclick="reservar()">Reservar imóvel</button>
+  <a href="../index.html" class="reserva-btn voltar-btn">← Voltar para Home</a>
+  <!-- Carrossel de fotos -->
+  <div class="carousel-container">
+  <div class="carousel">
+    <div class="slide active">
+      <img src="../img/1.cozinha.png" alt="Cozinha equipada e espaço para refeições">
+      <p class="caption">🍽️ Cozinha equipada e espaço para refeições</p>
+    </div>
+    <div class="slide">
+      <img src="../img/1.quarto-duplo.png" alt="Quarto confortável com TV e ventilador">
+      <p class="caption">🛏️ Quarto confortável com TV e ventilador</p>
+    </div>
+    <div class="slide">
+      <img src="../img/quarto-extra.png" alt="Quarto adicional com decoração moderna">
+      <p class="caption">🌿 Quarto adicional com decoração moderna</p>
+    </div>
+    <div class="slide">
+      <img src="../img/banheiro.png" alt="Banheiro com ducha e acabamento clean">
+      <p class="caption">🚿 Banheiro com ducha e acabamento clean</p>
+    </div>
+    <div class="slide">
+      <img src="../img/academia.png" alt="Academia completa no condomínio">
+      <p class="caption">🏋️‍♂️ Academia completa no condomínio</p>
+    </div>
+    <div class="slide">
+      <img src="../img/piscinas.png" alt="Piscinas com vista para o mar">
+      <p class="caption">🌊🏖️ Piscinas com vista para o mar</p>
+    </div>
+    <div class="slide">
+      <img src="../img/quadras.png" alt="Quadras esportivas à beira-mar">
+      <p class="caption">🏐🎾🌴 Quadras esportivas à beira-mar</p>
+    </div>
+  </div>
+  <button class="prev">⟨</button>
+  <button class="next">⟩</button>
+</div>
+
+
+  <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
+  <script>
+    const calendarEl = document.getElementById('calendar');
+    const calendar = new FullCalendar.Calendar(calendarEl, {
+      initialView: 'dayGridMonth',
+      locale: 'pt-br',
+      events: []
+    });
+    calendar.render();
+
+    function carregarCalendario() {
+      const imovel = document.getElementById('imovelSelect').value;
+      fetch(`/disponibilidade/${imovel}`)
+        .then(res => res.json())
+        .then(diasOcupados => {
+          const hoje = new Date();
+          const diasDoMes = [];
+          for (let i = 0; i < 30; i++) {
+            const dia = new Date(hoje);
+            dia.setDate(dia.getDate() + i);
+            diasDoMes.push(dia.toISOString().split('T')[0]);
+          }
+
+          const diasDisponiveis = diasDoMes.filter(d => !diasOcupados.includes(d));
+
+          const eventosDisponiveis = diasDisponiveis.map(data => ({
+            title: 'Disponível',
+            start: data,
+            color: '#28a745'
+          }));
+
+          const eventosIndisponiveis = diasOcupados.map(data => ({
+            title: 'Indisponível',
+            start: data,
+            color: '#ff4d4d'
+          }));
+
+          calendar.removeAllEvents();
+          calendar.addEventSource([...eventosDisponiveis, ...eventosIndisponiveis]);
+        });
+    }
+
+    function reservar() {
+      const imovel = document.getElementById('imovelSelect').value;
+      const numeroWhatsApp = '5571993019981';
+      const mensagem = encodeURIComponent(`Olá! Gostaria de reservar o imóvel: ${imovel}`);
+      window.open(`https://wa.me/${numeroWhatsApp}?text=${mensagem}`, '_blank');
+    }
+
+    document.getElementById('imovelSelect').addEventListener('change', carregarCalendario);
+    document.getElementById('imovelSelect').dispatchEvent(new Event('change'));
+
+    // Carrossel JS
+    const slides = document.querySelectorAll('.slide');
+    let current = 0;
+
+    document.querySelector('.next').onclick = () => {
+      slides[current].classList.remove('active');
+      current = (current + 1) % slides.length;
+      slides[current].classList.add('active');
+    };
+
+    document.querySelector('.prev').onclick = () => {
+      slides[current].classList.remove('active');
+      current = (current - 1 + slides.length) % slides.length;
+      slides[current].classList.add('active');
+    }
+      // Autoplay do carrossel
+setInterval(() => {
+  slides[current].classList.remove('active');
+  current = (current + 1) % slides.length;
+  slides[current].classList.add('active');
+  }, 5000); // troca a cada 5 segundos
+;
+  </script>
+</body>
+</html>
