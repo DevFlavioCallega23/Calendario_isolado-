@@ -61,7 +61,7 @@ footer {
   font-size: 0.8rem;
 }
 
-/* Paginas dos Imoveis */
+/* Páginas dos Imóveis */
 h1 {
   text-align: center;
 }
@@ -174,3 +174,77 @@ footer {
   overflow: hidden;
   box-shadow: 0 0 10px rgba(0,0,0,0.1);
 }
+
+/* Nova Galeria com Modal */
+.galeria {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 15px;
+  justify-content: center;
+  padding: 40px 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+.galeria img {
+  width: 100%;
+  height: 300px;       /* altura maior */
+  object-fit: cover;   /* recorta sem distorcer */
+  border-radius: 10px;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+.galeria img:hover {
+  transform: scale(1.05);
+}
+
+/* Modal */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 999;
+  left: 0; top: 0;
+  width: 100%; height: 100%;
+  background: rgba(0,0,0,0.8);
+  overflow: auto;
+}
+.modal-conteudo {
+  margin: 50px auto;
+  background: #fff;
+  padding: 20px;
+  max-width: 1200px; /* modal mais largo */
+  border-radius: 10px;
+}
+.modal img {
+  width: 100%;
+  max-width: 600px;   /* fotos grandes, estilo Airbnb */
+  height: auto;
+  margin: 10px;
+  border-radius: 10px;
+}
+
+/* Blocos de categorias dentro do modal */
+.categoria-bloco {
+  margin-bottom: 40px;
+  text-align: center;
+}
+.categoria-bloco h3 {
+  margin-bottom: 20px;
+  font-size: 1.4rem;
+  color: #333;
+}
+.categoria-imagens {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+}
+.categoria-imagens img {
+  width: 100%;
+  max-width: 500px;   /* fotos grandes dentro das categorias */
+  border-radius: 10px;
+  transition: transform 0.2s;
+}
+.categoria-imagens img:hover {
+  transform: scale(1.05);
+}
+
